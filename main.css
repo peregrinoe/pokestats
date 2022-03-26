@@ -1,0 +1,33 @@
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    transition: all .3s;
+}
+
+body{
+    background-color: #dddddd;
+    font-family: 'Roboto', sans-serif;
+}
+
+.container{
+    display: grid;
+    margin: auto;
+}
+
+.info-pokemon{
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+}
+
+.name-pokemon{
+    display: grid;
+    grid-template-columns:repeat(2, 1fr);
+    text-transform: uppercase;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: bolder;
+    font-size: 25px;
+    height: 30px;
+    background-color: aquamarine;
+    padding: 15px 20px;
+}
