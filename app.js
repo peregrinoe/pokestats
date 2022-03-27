@@ -99,7 +99,7 @@ const renderPokemonTypes = types => {
     pokeType.innerHTML = '';
     types.forEach(type => {
         const typeTextElement = document.createElement("div");
-        typeTextElement.style.color = typeColors[type.type.name];
+        typeTextElement.style.background = typeColors[type.type.name];
         typeTextElement.textContent = type.type.name;
         typeTextElement.textContent = "Tipo " + spanishName[type.type.name];
         pokeType.appendChild(typeTextElement);   
