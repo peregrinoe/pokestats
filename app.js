@@ -2,31 +2,35 @@ const pokeName = document.querySelector('[data-poke-name]');
 const pokemonName = document.querySelector('[data-pokemon-name]');
 const infoPokemon = document.querySelector('[data-pokemon-info]');
 const cardPokemon = document.querySelector('[data-pokemon-card]');
+const statsPokemon = document.querySelector('[data-pokemon-stats]');
+const statsPokemonBase = document.querySelector('[data-stats-pokemon-base]');
 const pokeImageContainer = document.querySelector('[data-poke-image-container]');
 const pokeImage = document.querySelector('[data-poke-image]');
 const pokeId = document.querySelector('[data-poke-id]');
 const pokeType = document.querySelector('[data-poke-type]');
-const statsPokemon = document.querySelector('[data-poke-stats]');
+const pokeAbility = document.querySelector('[data-poke-ability]');
+const pokeStats = document.querySelector('[data-poke-stats]');
 
 const typeColors = {
-    electric: '#FFEA70',
-    normal: '#B09398',
-    fire: '#FF675C',
-    water: '#0596C7',
-    ice: '#AFEAFD',
-    rock: '#999799',
-    flying: '#7AE7C7',
-    grass: '#4A9681',
-    psychic: '#FFC6D9',
-    ghost: '#561D25',
-    bug: '#A2FAA3',
-    poison: '#795663',
-    ground: '#D2B074',
-    dragon: '#DA627D',
-    steel: '#1D8A99',
-    fighting: '#2F2F2F',
-    fairy: '#FFC0CB',
-    default: '#2A1A1F',
+    electric: '#fab715',
+    normal: '#aaa59c',
+    fire: '#f14411',
+    water: '#1063b7',
+    ice: '#a0e6fe',
+    rock: '#9d853c',
+    flying: '#97a9f5',
+    grass: '#27cb50',
+    psychic: '#df356a',
+    ghost: '#474696',
+    bug: '#89980e',
+    poison: '#241923',
+    ground: '#d2b054',
+    dragon: '#725ada',
+    steel: '#8f8f9c',
+    fighting: '#7f331c',
+    fairy: '#e190e1',
+    dark: '#3d2d22',
+    default: '#a17366',
 };
 
 const spanishName = {
@@ -47,7 +51,17 @@ const spanishName = {
     steel: 'Acero',
     fighting: 'Pelea',
     fairy: 'Hada',
+    dark: "Sinistro",
     default: 'N/A',
+};
+
+const spanishStats = {
+    "hp" : 'Salud',
+    "attack" : 'Ataque',
+    "defense" : 'Defensa',
+    "special-attack": 'Ataque Especial',
+    "special-defense": 'Defensa Especial',
+    "speed" : 'Velocidad',
 };
 
 const searchPokemon = event => {
@@ -56,6 +70,7 @@ const searchPokemon = event => {
     fetch(`https://pokeapi.co/api/v2/pokemon/${value.toLowerCase()}`)
         .then(data => data.json())
         .then(response => renderPokemonData(response))
+        .catch(err => renderNotFound())
 }
 
 const renderPokemonData = data => {
@@ -64,14 +79,18 @@ const renderPokemonData = data => {
     
     pokeName.textContent = data.name;
     pokeImage.setAttribute('src', sprite);
-    pokeId.textContent = `N° ${data.id}`;
+    pokeId.textContent = `N° #${data.id}`;
+    statsPokemonBase.textContent = 'Stats Base';
     setCardColor(types);
     renderPokemonTypes(types);
+    renderPokemonStats(stats);
+    renderPokemonAbility(abilities);
 }
 
 const setCardColor = types => {
     const colorOne = typeColors[types[0].type.name];
     const colorTwo = types[1] ? typeColors[types[1].type.name] : typeColors.default;
+    pokemonName.style.background = colorOne;
     pokeImage.style.background =  `radial-gradient(${colorTwo} 33%, ${colorOne} 33%)`;
     pokeImage.style.backgroundSize = ' 5px 5px';
 }
@@ -82,7 +101,42 @@ const renderPokemonTypes = types => {
         const typeTextElement = document.createElement("div");
         typeTextElement.style.color = typeColors[type.type.name];
         typeTextElement.textContent = type.type.name;
-        typeTextElement.textContent = spanishName[type.type.name];
+        typeTextElement.textContent = "Tipo " + spanishName[type.type.name];
         pokeType.appendChild(typeTextElement);   
     });
+}
+
+const renderPokemonAbility = abilities => {
+    pokeAbility.innerHTML = '';
+    abilities.forEach(abilities => {
+        const abilityTextElement = document.createElement("div");
+        abilityTextElement.textContent = abilities.ability.name;
+        pokeAbility.appendChild(abilityTextElement);   
+    });
+}
+
+const renderPokemonStats = stats => {
+    pokeStats.innerHTML = '';
+    stats.forEach(stat => {
+        const statElement = document.createElement("div");
+        const statElementName = document.createElement("div");
+        const statElementAmount = document.createElement("div");
+        statElementName.textContent = stat.stat.name;
+        statElementName.textContent = spanishStats[stat.stat.name];
+        statElementAmount.textContent = stat.base_stat;
+        statElement.appendChild(statElementName);
+        statElement.appendChild(statElementAmount);
+        pokeStats.appendChild(statElement);
+    })
+}
+
+const renderNotFound = () => {
+    pokeName.textContent = 'No encontrado';
+    pokeImage.setAttribute('src', 'https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/e7cb1a05e60dd2e.png');
+    pokeImage.style.background =  '';
+    pokeType.innerHTML = '';
+    pokeStats.innerHTML = '';
+    pokeId.textContent = '';
+    pokeAbility.textContent = '';
+    statsPokemonBase.textContent = '';
 }

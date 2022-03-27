@@ -17,7 +17,6 @@ body{
 
 .info-pokemon{
     display: grid;
-    grid-template-rows: repeat(2, 1fr);
 }
 
 .name-pokemon{
@@ -29,5 +28,30 @@ body{
     font-size: 25px;
     height: 30px;
     background-color: aquamarine;
+    color: #fefefe;
     padding: 15px 20px;
+}
+
+.card-pokemon{
+    display: grid;
+    grid-template-rows: 2.5fr, .5fr, .5fr, .5fr, 2fr;
+    width: 85%;
+    background:#000 ;
+    margin: auto;
+    color: #ffffff;
+    align-items: center;
+    text-align: center;
+    align-content: center; 
+    border-radius: 20px;
+    margin-top: 10px;
+}
+
+.poke-image{
+    margin-left: 2px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 10px;
+    justify-self: center;
+    object-fit: cover;
+    width: 25%;
 }
