@@ -17,6 +17,10 @@
 }    
 
 @media only screen and (max-width: 550px) {
+
+    .name-pokemon{
+        font-size: 18px;
+    }
     .poke-stats{
         width: 90%;
         font-size: .9em;
@@ -28,3 +32,11 @@
     }
        
 }   
+
+@media only screen and (max-width: 350px) {
+    .card-pokemon{
+        width: 95%;
+    }
+       
+}   
+  

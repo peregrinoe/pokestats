@@ -128,7 +128,7 @@ const renderPokemonStats = stats => {
         const statElementBar = document.createElement("div");
         statElementName.style.cssText = 'width: 70%;';
         statElementAmount.style.cssText = 'width: 10%; justify-content: right;';
-        statElementBar.style.cssText = 'width: 92%; height : 15px ; justify-self: left; margin-right: 5px; background : #0f0f0f; border-radius: 10px; @media only screen and (max-width: 750px){height : 10px ;} ;';
+        statElementBar.style.cssText = 'width: 90%; height : 15px ; justify-self: left; margin-right: 5px; background : #0f0f0f; border-radius: 10px;' ;
         statElementName.setAttribute("id", "poke-stats-name") ;
         statElementPoints.setAttribute("id", "poke-stats-points");
         statElementAmount.setAttribute("id", "poke-stats-amount");
