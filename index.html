@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Roboto:wght@300&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="mediaQueries.css">
 </head>
 <body>
     <div class="container">
@@ -18,8 +19,8 @@
                     
                 </div>
                 <div class="searchPokemon">
-                    <form action="" onsubmit="searchPokemon(event)" class="searchPokemon">
-                        <input type="text" name="pokemon" autocomplete="off" placeholder="Buscar pokemon">
+                    <form action="" onsubmit="searchPokemon(event)">
+                        <input type="text" name="pokemon" autocomplete="off" placeholder="Buscar pokemon" class="searchPokemon">
                     </form>
                 </div>
             </div>
@@ -29,7 +30,6 @@
                 </div>
                 <div data-poke-id class="poke-id">N° #000</div>
                 <div data-poke-type class="poke-type">
-                    Tipo Pokemon
                 </div>
                 <div data-poke-ability class="poke-ability"></div>
                 <div data-pokemon-stats class="pokemon-stats">
@@ -37,14 +37,17 @@
                         <p>Stats Base</p>
                     </div>
                     <div data-poke-stats class="poke-stats">
-                        <div class="Salud">Salud</div>
-                        <div class="Ataque">Ataque</div>
-                        <div class="Defensa">Defensa</div>
-                        <div class="Ataque-Especial">Ataque Especial</div>
-                        <div class="Defensa-Especial">Defensa Especial</div>
-                        <div class="Velocidad">Velocidad</div>
+                        <div class="poke-stats-value">
+                            <!--<div class="Salud">Salud</div>
+                            <div class="Ataque">Ataque</div>
+                            <div class="Defensa">Defensa</div>
+                            <div class="Ataque-Especial">Ataque Especial</div>
+                            <div class="Defensa-Especial">Defensa Especial</div>
+                            <div class="Velocidad">Velocidad</div>--->
+                        </div>
                     </div>
                 </div>
+                <div data-color-footer-poke class="color-footer-poke"></div>
             </div> 
         </div>
     </div>

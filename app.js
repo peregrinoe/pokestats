@@ -10,6 +10,7 @@ const pokeId = document.querySelector('[data-poke-id]');
 const pokeType = document.querySelector('[data-poke-type]');
 const pokeAbility = document.querySelector('[data-poke-ability]');
 const pokeStats = document.querySelector('[data-poke-stats]');
+const pokeFooterColor = document.querySelector('[data-color-footer-poke]');
 
 const typeColors = {
     electric: '#fab715',
@@ -93,6 +94,8 @@ const setCardColor = types => {
     pokemonName.style.background = colorOne;
     pokeImage.style.background =  `radial-gradient(${colorTwo} 33%, ${colorOne} 33%)`;
     pokeImage.style.backgroundSize = ' 5px 5px';
+    pokeFooterColor.style.background = colorOne;
+    statsPokemonBase.style.color = colorOne;
 }
 
 const renderPokemonTypes = types => {
@@ -102,7 +105,7 @@ const renderPokemonTypes = types => {
         typeTextElement.style.background = typeColors[type.type.name];
         typeTextElement.textContent = type.type.name;
         typeTextElement.textContent = "Tipo " + spanishName[type.type.name];
-        pokeType.appendChild(typeTextElement);   
+        pokeType.appendChild(typeTextElement);
     });
 }
 
@@ -120,15 +123,27 @@ const renderPokemonStats = stats => {
     stats.forEach(stat => {
         const statElement = document.createElement("div");
         const statElementName = document.createElement("div");
+        const statElementPoints = document.createElement("div");
         const statElementAmount = document.createElement("div");
+        const statElementBar = document.createElement("div");
+        statElementName.style.cssText = 'width: 70%;';
+        statElementAmount.style.cssText = 'width: 10%; justify-content: right;';
+        statElementBar.style.cssText = 'width: 92%; height : 15px ; justify-self: left; margin-right: 5px; background : #0f0f0f; border-radius: 10px; @media only screen and (max-width: 750px){height : 10px ;} ;';
+        statElementName.setAttribute("id", "poke-stats-name") ;
+        statElementPoints.setAttribute("id", "poke-stats-points");
+        statElementAmount.setAttribute("id", "poke-stats-amount");
         statElementName.textContent = stat.stat.name;
         statElementName.textContent = spanishStats[stat.stat.name];
+        statElementBar.textContent = stat.base_stat;
         statElementAmount.textContent = stat.base_stat;
+        statElementPoints.appendChild(statElementBar);
         statElement.appendChild(statElementName);
+        statElement.appendChild(statElementPoints);
         statElement.appendChild(statElementAmount);
-        pokeStats.appendChild(statElement);
+        pokeStats.appendChild(statElement); 
     })
 }
+
 
 const renderNotFound = () => {
     pokeName.textContent = 'No encontrado';

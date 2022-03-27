@@ -1,0 +1,30 @@
+
+@media only screen and (max-width: 750px) {
+    .poke-type{
+        width: 40%;
+    }
+
+    .poke-stats{
+        width: 90%;
+        font-size: 1.1em;
+        font-weight: bolder;
+    }
+
+    .searchPokemon{
+        margin-right: 10px;
+    }
+    
+}    
+
+@media only screen and (max-width: 550px) {
+    .poke-stats{
+        width: 90%;
+        font-size: .9em;
+        font-weight: bolder;
+    }
+
+    .card-pokemon{
+        width: 92%;
+    }
+       
+}   
