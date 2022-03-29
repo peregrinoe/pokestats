@@ -76,7 +76,7 @@ const searchPokemon = event => {
 
 const renderPokemonData = data => {
     const sprite = data.sprites.front_default;
-    const {stats, types, abilities} = data;
+    const {stats, types, abilities} = data;  
     pokeName.textContent = data.name;
     pokeImage.setAttribute('src', sprite);
     pokeId.textContent = `N° #${data.id}`;
@@ -85,7 +85,10 @@ const renderPokemonData = data => {
     renderPokemonTypes(types);
     renderPokemonStats(stats);
     renderPokemonAbility(abilities);
+    colorBars = setCardColorBars(types);
+    console.log(colorBars);
 };
+
 
 const setCardColor = types => {
     const colorOne = typeColors[types[0].type.name];
@@ -95,6 +98,12 @@ const setCardColor = types => {
     pokeImage.style.backgroundSize = ' 5px 5px';
     pokeFooterColor.style.background = colorOne;
     statsPokemonBase.style.color = colorOne;
+
+};
+
+const setCardColorBars = types => {
+    const colorOneOne = typeColors[types[0].type.name];
+    return colorOneOne
 };
 
 const renderPokemonTypes = types => {
@@ -115,13 +124,13 @@ const renderPokemonAbility = abilities => {
         const abilityTextElement = document.createElement("div");
         abilityTextElement.textContent = abilities.ability.name;  
         pokeAbility.appendChild(abilityTextElement);
-        
+
         fetch(urlPokemon)
             .then(response => response.json())
             .then(data => mostrarData(data))
+
         const mostrarData = (data) => {
-            console.log(data.names[5].name);
-            abilityTextElement.textContent = data.names[5].name;
+            abilityTextElement.textContent = data.names[5].name;   
         }
     });
 };
@@ -129,16 +138,18 @@ const renderPokemonAbility = abilities => {
 const renderPokemonStats = stats => {
     pokeStats.innerHTML = '';
     stats.forEach(stat => {
+        console.log(pokeId)
         const statElement = document.createElement("div");
         const statElementName = document.createElement("div");
         const statElementPoints = document.createElement("div");
         const statElementAmount = document.createElement("div");
         const statElementBar = document.createElement("div");
+        const pxWidth = stat.base_stat + 'px';
         statElementName.style.cssText = 'width: 70%;';
         statElementAmount.style.cssText = 'width: 10%; justify-content: right;';
-        statElementBar.style.cssText = 'width: 90%; height : 15px ; justify-self: left; margin-right: 5px; margin-bottom: 5px; background : #0f0f0f; border-radius: 10px;' ;
+        statElementBar.style.cssText = `width: ${pxWidth}; height : 15px ; justify-self: left; margin-right: 5px; margin-bottom: 5px; background : #0f0f0f; border-radius: 10px; transition: all .3s;` ;
         statElementName.setAttribute("id", "poke-stats-name") ;
-        statElementPoints.setAttribute("id", "poke-stats-points");
+        statElementBar.setAttribute("id", "poke-stats-points");
         statElementAmount.setAttribute("id", "poke-stats-amount");
         statElementName.textContent = stat.stat.name;
         statElementName.textContent = spanishStats[stat.stat.name];
@@ -152,6 +163,7 @@ const renderPokemonStats = stats => {
     })
 };
 
+
 const renderNotFound = () => {
     pokeName.textContent = 'No encontrado';
     pokeImage.setAttribute('src', 'https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/e7cb1a05e60dd2e.png');
@@ -162,4 +174,5 @@ const renderNotFound = () => {
     pokeAbility.textContent = '';
     statsPokemonBase.textContent = '';
 };
+
 
