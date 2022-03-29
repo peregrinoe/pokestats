@@ -72,21 +72,20 @@ const searchPokemon = event => {
         .then(data => data.json())
         .then(response => renderPokemonData(response))
         .catch(err => renderNotFound())
-}
+};
 
 const renderPokemonData = data => {
     const sprite = data.sprites.front_default;
-    const {stats, types, abilities, moves } = data;
-    
+    const {stats, types, abilities} = data;
     pokeName.textContent = data.name;
     pokeImage.setAttribute('src', sprite);
     pokeId.textContent = `N° #${data.id}`;
-    statsPokemonBase.textContent = 'Stats Base';
+    statsPokemonBase.textContent = "Experiencia Base: " + data.base_experience;
     setCardColor(types);
     renderPokemonTypes(types);
     renderPokemonStats(stats);
     renderPokemonAbility(abilities);
-}
+};
 
 const setCardColor = types => {
     const colorOne = typeColors[types[0].type.name];
@@ -96,7 +95,7 @@ const setCardColor = types => {
     pokeImage.style.backgroundSize = ' 5px 5px';
     pokeFooterColor.style.background = colorOne;
     statsPokemonBase.style.color = colorOne;
-}
+};
 
 const renderPokemonTypes = types => {
     pokeType.innerHTML = '';
@@ -107,16 +106,25 @@ const renderPokemonTypes = types => {
         typeTextElement.textContent = "Tipo " + spanishName[type.type.name];
         pokeType.appendChild(typeTextElement);
     });
-}
+};
 
 const renderPokemonAbility = abilities => {
     pokeAbility.innerHTML = '';
     abilities.forEach(abilities => {
+        const urlPokemon = abilities.ability.url;
         const abilityTextElement = document.createElement("div");
-        abilityTextElement.textContent = abilities.ability.name;
-        pokeAbility.appendChild(abilityTextElement);   
+        abilityTextElement.textContent = abilities.ability.name;  
+        pokeAbility.appendChild(abilityTextElement);
+        
+        fetch(urlPokemon)
+            .then(response => response.json())
+            .then(data => mostrarData(data))
+        const mostrarData = (data) => {
+            console.log(data.names[5].name);
+            abilityTextElement.textContent = data.names[5].name;
+        }
     });
-}
+};
 
 const renderPokemonStats = stats => {
     pokeStats.innerHTML = '';
@@ -142,8 +150,7 @@ const renderPokemonStats = stats => {
         statElement.appendChild(statElementAmount);
         pokeStats.appendChild(statElement); 
     })
-}
-
+};
 
 const renderNotFound = () => {
     pokeName.textContent = 'No encontrado';
@@ -154,4 +161,5 @@ const renderNotFound = () => {
     pokeId.textContent = '';
     pokeAbility.textContent = '';
     statsPokemonBase.textContent = '';
-}
+};
+
