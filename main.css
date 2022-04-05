@@ -50,8 +50,7 @@ body{
 
 .card-pokemon{
     display: grid;
-    grid-template-rows: 2.5fr .2fr .2fr .2fr 2fr .2fr;
-    width: 85%;
+    width: 70%;
     background:#ffffff ;
     margin: auto;
     color: #000000;
@@ -104,7 +103,7 @@ body{
     grid-template-columns: 1fr;
     margin: auto;
     margin-bottom: 20px;
-    width: 60%;
+    width: 67%;
     font-size: 1.1em;
     font-weight: bolder;
 }
@@ -122,4 +121,11 @@ body{
     position: relative;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+}
+
+.color-top-poke{
+    height: 20px;
+    position: relative;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }

@@ -11,6 +11,7 @@ const pokeType = document.querySelector('[data-poke-type]');
 const pokeAbility = document.querySelector('[data-poke-ability]');
 const pokeStats = document.querySelector('[data-poke-stats]');
 const pokeFooterColor = document.querySelector('[data-color-footer-poke]');
+const pokeTopColor = document.querySelector('[data-color-top-poke]');
 
 const typeColors = {
     electric: '#fab715',
@@ -87,7 +88,7 @@ const filterLive = async () => {
 filterLive();
 
 const renderPokemonData = data => {
-    const sprite = data.sprites.front_default;
+    const sprite = data.sprites.other["official-artwork"].front_default;
     const {stats, types, abilities} = data;  
     pokeName.textContent = data.name;
     pokeImage.setAttribute('src', sprite);
@@ -98,18 +99,19 @@ const renderPokemonData = data => {
     renderPokemonStats(stats);
     renderPokemonAbility(abilities);
     const colorBars = setCardColorBars(types);
-    console.log(colorBars)
+    console.log(sprite)
 };
 
 const setCardColor = types => {
     const colorOne = typeColors[types[0].type.name];
     const colorTwo = types[1] ? typeColors[types[1].type.name] : typeColors.default;
     pokemonName.style.background = colorOne;
-    pokeImage.style.background =  `radial-gradient(${colorTwo} 33%, ${colorOne} 33%)`;
-    pokeImage.style.backgroundSize = ' 5px 5px';
-    pokeFooterColor.style.background = colorOne;
+    /* pokeImage.style.background =  `radial-gradient(${colorTwo} 33%, ${colorOne} 33%)`;
+    pokeImage.style.backgroundSize = ' 5px 5px'; */
+    pokeFooterColor.style.background = colorTwo;
+    pokeTopColor.style.background = colorOne;
     statsPokemonBase.style.color = colorOne;
-
+    pokeImageContainer.style.cssText = `background: linear-gradient(to bottom, ${colorOne} 0%, ${colorOne} 50%, white 50%, white 100%);`;
 };
 
 const renderPokemonTypes = types => {
@@ -153,7 +155,7 @@ const renderPokemonStats = stats => {
         var widthpx = Number(pxWidth)
         statElementName.style.cssText = 'width: 70%;';
         statElementAmount.style.cssText = 'width: 10%; justify-content: right;';
-        statElementBar.style.cssText = `width: ${widthpx}%; height : 15px ; justify-self: left; margin-right: 5px; margin-bottom: 5px; background : #0f0f0f; border-radius: 10px; transition: all .3s;` ;
+        statElementBar.style.cssText = `width: ${widthpx}%; height : 15px ; justify-self: left; margin-right: 5px; margin-bottom: 5px; background : #383737; border-radius: 10px; transition: all .3s;` ;
         statElementName.setAttribute("id", "poke-stats-name") ;
         statElementBar.setAttribute("id", "poke-stats-points");
         statElementAmount.setAttribute("id", "poke-stats-amount");
@@ -176,13 +178,18 @@ const setCardColorBars = types => {
 
 const renderNotFound = () => {
     pokeName.textContent = 'No encontrado';
+    pokemonName.style.background = '';
     pokeImage.setAttribute('src', 'https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/e7cb1a05e60dd2e.png');
     pokeImage.style.background =  '';
+    pokeFooterColor.style.background =  '';
+    pokeTopColor.style.background =  '';
+    pokeImageContainer.style.background = '';   
     pokeType.innerHTML = '';
     pokeStats.innerHTML = '';
     pokeId.textContent = '';
     pokeAbility.textContent = '';
     statsPokemonBase.textContent = '';
+    
 };
 
 
