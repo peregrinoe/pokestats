@@ -19,12 +19,12 @@ const typeColors = {
     water: '#1063b7',
     ice: '#a0e6fe',
     rock: '#9d853c',
-    flying: '#97a9f5',
+    flying: '#207394',
     grass: '#27cb50',
     psychic: '#df356a',
     ghost: '#474696',
-    bug: '#89980e',
-    poison: '#241923',
+    bug: '#cddc39',
+    poison: '#482645',
     ground: '#d2b054',
     dragon: '#725ada',
     steel: '#8f8f9c',
@@ -74,21 +74,32 @@ const searchPokemon = event => {
         .catch(err => renderNotFound())
 };
 
+const filter = document.querySelector('#filterPokemon')
+
+const filterLive = async () => {
+    const textUser = filter.value.toLowerCase();
+    const url = 'https://pokeapi.co/api/v2/pokemon/'
+    const res = await fetch(url)
+    const listPoke = await res.json()
+    console.log (listPoke.results);
+}
+
+filterLive();
+
 const renderPokemonData = data => {
     const sprite = data.sprites.front_default;
     const {stats, types, abilities} = data;  
     pokeName.textContent = data.name;
     pokeImage.setAttribute('src', sprite);
-    pokeId.textContent = `N° #${data.id}`;
+    pokeId.textContent = `N° # ${data.id}`;
     statsPokemonBase.textContent = "Experiencia Base: " + data.base_experience;
     setCardColor(types);
     renderPokemonTypes(types);
     renderPokemonStats(stats);
     renderPokemonAbility(abilities);
-    colorBars = setCardColorBars(types);
-    console.log(colorBars);
+    const colorBars = setCardColorBars(types);
+    console.log(colorBars)
 };
-
 
 const setCardColor = types => {
     const colorOne = typeColors[types[0].type.name];
@@ -99,11 +110,6 @@ const setCardColor = types => {
     pokeFooterColor.style.background = colorOne;
     statsPokemonBase.style.color = colorOne;
 
-};
-
-const setCardColorBars = types => {
-    const colorOneOne = typeColors[types[0].type.name];
-    return colorOneOne
 };
 
 const renderPokemonTypes = types => {
@@ -120,11 +126,10 @@ const renderPokemonTypes = types => {
 const renderPokemonAbility = abilities => {
     pokeAbility.innerHTML = '';
     abilities.forEach(abilities => {
-        const urlPokemon = abilities.ability.url;
         const abilityTextElement = document.createElement("div");
         abilityTextElement.textContent = abilities.ability.name;  
         pokeAbility.appendChild(abilityTextElement);
-
+        const urlPokemon = abilities.ability.url;
         fetch(urlPokemon)
             .then(response => response.json())
             .then(data => mostrarData(data))
@@ -144,25 +149,30 @@ const renderPokemonStats = stats => {
         const statElementPoints = document.createElement("div");
         const statElementAmount = document.createElement("div");
         const statElementBar = document.createElement("div");
-        const pxWidth = stat.base_stat + 'px';
+        const pxWidth = stat.base_stat * 100 / 200;
+        var widthpx = Number(pxWidth)
         statElementName.style.cssText = 'width: 70%;';
         statElementAmount.style.cssText = 'width: 10%; justify-content: right;';
-        statElementBar.style.cssText = `width: ${pxWidth}; height : 15px ; justify-self: left; margin-right: 5px; margin-bottom: 5px; background : #0f0f0f; border-radius: 10px; transition: all .3s;` ;
+        statElementBar.style.cssText = `width: ${widthpx}%; height : 15px ; justify-self: left; margin-right: 5px; margin-bottom: 5px; background : #0f0f0f; border-radius: 10px; transition: all .3s;` ;
         statElementName.setAttribute("id", "poke-stats-name") ;
         statElementBar.setAttribute("id", "poke-stats-points");
         statElementAmount.setAttribute("id", "poke-stats-amount");
         statElementName.textContent = stat.stat.name;
         statElementName.textContent = spanishStats[stat.stat.name];
-        statElementBar.textContent = stat.base_stat;
         statElementAmount.textContent = stat.base_stat;
         statElementPoints.appendChild(statElementBar);
         statElement.appendChild(statElementName);
         statElement.appendChild(statElementPoints);
         statElement.appendChild(statElementAmount);
         pokeStats.appendChild(statElement); 
+
     })
 };
 
+const setCardColorBars = types => {
+    const colorOneOne = typeColors[types[0].type.name];
+    return colorOneOne
+};
 
 const renderNotFound = () => {
     pokeName.textContent = 'No encontrado';
