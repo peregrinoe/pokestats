@@ -92,6 +92,13 @@ body{
     padding: 2px;
 }
 
+.poke-ability{
+    display: flex;
+    justify-content: space-between;
+    width: 60%;
+    justify-self: center;
+}
+
 .stats-pokemon-base{
     font-size: 1.2em;
     font-weight:bolder;

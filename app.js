@@ -76,16 +76,35 @@ const searchPokemon = event => {
 };
 
 const filter = document.querySelector('#filterPokemon')
+const btnSearch = document.querySelector('#btn')
+const pokemonsNumber = 898
 
-const filterLive = async () => {
-    const textUser = filter.value.toLowerCase();
-    const url = 'https://pokeapi.co/api/v2/pokemon/'
-    const res = await fetch(url)
-    const listPoke = await res.json()
-    console.log (listPoke.results);
+const fetchPokemons = async () => {
+    for(let i =1; 1<=pokemonsNumber; i++){
+        await filterLive(i)
+    }
 }
 
-filterLive();
+const filterLive = async (id) => {
+    const url = 'https://pokeapi.co/api/v2/pokemon/'+id.toString()
+    const res = await fetch(url)
+    const listPoke = await res.json()
+    
+    const filterPokemons = () => {
+        // console.log(filter.value);
+        const text = filter.value.toLowerCase();
+        const namePoke = listPoke.name.toLowerCase();
+        if(text.indexOf(namePoke) !== -1 ){
+            console.log("bien")
+        }
+        console.log(namePoke)   
+    } 
+
+
+    filter.addEventListener('keyup', filterPokemons)
+}
+
+fetchPokemons();
 
 const renderPokemonData = data => {
     const sprite = data.sprites.other["official-artwork"].front_default;
@@ -98,8 +117,7 @@ const renderPokemonData = data => {
     renderPokemonTypes(types);
     renderPokemonStats(stats);
     renderPokemonAbility(abilities);
-    const colorBars = setCardColorBars(types);
-    console.log(sprite)
+    setCardColorBars(types);
 };
 
 const setCardColor = types => {
@@ -129,7 +147,8 @@ const renderPokemonAbility = abilities => {
     pokeAbility.innerHTML = '';
     abilities.forEach(abilities => {
         const abilityTextElement = document.createElement("div");
-        abilityTextElement.textContent = abilities.ability.name;  
+        abilityTextElement.textContent = abilities.ability.name; 
+        abilityTextElement.style.cssText =''; 
         pokeAbility.appendChild(abilityTextElement);
         const urlPokemon = abilities.ability.url;
         fetch(urlPokemon)
@@ -155,7 +174,7 @@ const renderPokemonStats = stats => {
         var widthpx = Number(pxWidth)
         statElementName.style.cssText = 'width: 70%;';
         statElementAmount.style.cssText = 'width: 10%; justify-content: right;';
-        statElementBar.style.cssText = `width: ${widthpx}%; height : 15px ; justify-self: left; margin-right: 5px; margin-bottom: 5px; background : #383737; border-radius: 10px; transition: all .3s;` ;
+        statElementBar.style.cssText = `width: ${widthpx}%; height : 15px ; justify-self: left; margin-right: 5px; margin-top: 5px; background : #383737; border-radius: 10px; transition: all .3s;` ;
         statElementName.setAttribute("id", "poke-stats-name") ;
         statElementBar.setAttribute("id", "poke-stats-points");
         statElementAmount.setAttribute("id", "poke-stats-amount");
@@ -189,7 +208,6 @@ const renderNotFound = () => {
     pokeId.textContent = '';
     pokeAbility.textContent = '';
     statsPokemonBase.textContent = '';
-    
 };
 
 
