@@ -101,7 +101,7 @@ const filterLive = async (id) => {
     } 
 
 
-    filter.addEventListener('keyup', filterPokemons)
+    // filter.addEventListener('keyup', filterPokemons) busca de pokemon al presionar letra 
 }
 
 fetchPokemons();
@@ -171,10 +171,9 @@ const renderPokemonStats = stats => {
         const statElementAmount = document.createElement("div");
         const statElementBar = document.createElement("div");
         const pxWidth = stat.base_stat * 100 / 200;
-        var widthpx = Number(pxWidth)
         statElementName.style.cssText = 'width: 70%;';
         statElementAmount.style.cssText = 'width: 10%; justify-content: right;';
-        statElementBar.style.cssText = `width: ${widthpx}%; height : 15px ; justify-self: left; margin-right: 5px; margin-top: 5px; background : #383737; border-radius: 10px; transition: all .3s;` ;
+        statElementBar.style.cssText = `width: ${pxWidth}%; height : 15px ; justify-self: left; margin-right: 5px; margin-top: 5px; background : #383737; border-radius: 10px; transition: all .3s;` ;
         statElementName.setAttribute("id", "poke-stats-name") ;
         statElementBar.setAttribute("id", "poke-stats-points");
         statElementAmount.setAttribute("id", "poke-stats-amount");
