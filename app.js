@@ -83,8 +83,9 @@ const fetchPokemons = async () => {
     for(let i =1; 1<=pokemonsNumber; i++){
         await filterLive(i)
     }
-}
+};
 
+/*
 const filterLive = async (id) => {
     const url = 'https://pokeapi.co/api/v2/pokemon/'+id.toString()
     const res = await fetch(url)
@@ -104,7 +105,10 @@ const filterLive = async (id) => {
     // filter.addEventListener('keyup', filterPokemons) busca de pokemon al presionar letra 
 }
 
+
 fetchPokemons();
+
+*/
 
 const renderPokemonData = data => {
     const sprite = data.sprites.other["official-artwork"].front_default;
@@ -164,7 +168,6 @@ const renderPokemonAbility = abilities => {
 const renderPokemonStats = stats => {
     pokeStats.innerHTML = '';
     stats.forEach(stat => {
-        console.log(pokeId)
         const statElement = document.createElement("div");
         const statElementName = document.createElement("div");
         const statElementPoints = document.createElement("div");
