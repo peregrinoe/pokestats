@@ -74,6 +74,13 @@ body{
     height: 200px;
 }
 
+.pokemon-next{
+    display: flex;
+    justify-content: space-between;
+    width: 40%;
+    justify-self: center;
+}
+
 .poke-type{
     display: grid;
     grid-template-columns: 1fr;

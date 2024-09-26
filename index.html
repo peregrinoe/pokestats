@@ -24,13 +24,22 @@
                         <input type="text" name="pokemon" autocomplete="off" placeholder="Buscar" class="searchPokemon" id="filterPokemon">
                     </form>
                 </div>
+                
             </div>
             <div data-pokemon-card class="card-pokemon">
                 <div data-color-top-poke class="color-top-poke"></div>
                 <div data-poke-image-container class="poke-image-container">
                     <img data-poke-image class="poke-image" src="https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/e7cb1a05e60dd2e.png" alt="">
                 </div>
-                <div data-poke-id class="poke-id"></div>
+                <div class="pokemon-next">
+                    <button id="prev-btn">Anterior</button>
+                    <div data-poke-id class="poke-id">
+                        <span id="pokemon-id"></span> <!-- Aquí se mostrará el ID -->
+                    </div>
+                    <button id="next-btn">Siguiente</button>
+                </div>
+                <div next-pokemon class="next-pokemon">
+                </div>
                 <div data-poke-type class="poke-type">
                 </div>
                 <div data-poke-ability class="poke-ability"></div>

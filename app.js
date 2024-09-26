@@ -12,6 +12,11 @@ const pokeAbility = document.querySelector('[data-poke-ability]');
 const pokeStats = document.querySelector('[data-poke-stats]');
 const pokeFooterColor = document.querySelector('[data-color-footer-poke]');
 const pokeTopColor = document.querySelector('[data-color-top-poke]');
+const filter = document.querySelector('#filterPokemon');
+const btnSearch = document.querySelector('#btn');
+const pokemonsNumber = 898;
+
+let currentPokemonId = 1; // Agregado: Almacena el ID del Pokémon actual
 
 const typeColors = {
     electric: '#fab715',
@@ -75,40 +80,40 @@ const searchPokemon = event => {
         .catch(err => renderNotFound())
 };
 
-const filter = document.querySelector('#filterPokemon')
-const btnSearch = document.querySelector('#btn')
-const pokemonsNumber = 898
-
-const fetchPokemons = async () => {
-    for(let i =1; 1<=pokemonsNumber; i++){
-        await filterLive(i)
+const fetchPokemonData = async (id) => { // Cambiado: Nombre de la función
+    try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+        if (!response.ok) throw new Error('No encontrado');
+        const data = await response.json();
+        currentPokemonId = data.id; // Actualiza el ID actual
+        renderPokemonData(data);
+    } catch (error) {
+        renderNotFound();
     }
 };
 
-/*
-const filterLive = async (id) => {
-    const url = 'https://pokeapi.co/api/v2/pokemon/'+id.toString()
-    const res = await fetch(url)
-    const listPoke = await res.json()
-    
-    const filterPokemons = () => {
-        // console.log(filter.value);
-        const text = filter.value.toLowerCase();
-        const namePoke = listPoke.name.toLowerCase();
-        if(text.indexOf(namePoke) !== -1 ){
-            console.log("bien")
-        }
-        console.log(namePoke)   
-    } 
 
+// Funciones para manejar la navegación
+const nextPokemon = () => {
+    const nextId = currentPokemonId + 1;
+    if (nextId <= pokemonsNumber) {
+        fetchPokemonData(nextId);
+    }
+};
 
-    // filter.addEventListener('keyup', filterPokemons) busca de pokemon al presionar letra 
-}
+const previousPokemon = () => {
+    const previousId = currentPokemonId - 1;
+    if (previousId >= 1) {
+        fetchPokemonData(previousId);
+    }
+};
 
+// Asocia los botones a las funciones una sola vez
+document.getElementById('next-btn').addEventListener('click', nextPokemon);
+document.getElementById('prev-btn').addEventListener('click', previousPokemon);
 
-fetchPokemons();
-
-*/
+// Llama a la función al cargar la página
+fetchPokemonData(currentPokemonId);
 
 const renderPokemonData = data => {
     const sprite = data.sprites.other["official-artwork"].front_default;
@@ -117,11 +122,14 @@ const renderPokemonData = data => {
     pokeImage.setAttribute('src', sprite);
     pokeId.textContent = `N° # ${data.id}`;
     statsPokemonBase.textContent = "Experiencia Base: " + data.base_experience;
+    currentPokemonId = data.id; // Actualiza el ID actual
     setCardColor(types);
     renderPokemonTypes(types);
-    renderPokemonStats(stats);
+    renderPokemonStats(stats, types);
     renderPokemonAbility(abilities);
     setCardColorBars(types);
+    const primaryType = types[0].type.name; // Cambiado
+    const colorOne = typeColors[primaryType]; // Asegúrate de que esto esté correcto
 };
 
 const setCardColor = types => {
@@ -165,8 +173,10 @@ const renderPokemonAbility = abilities => {
     });
 };
 
-const renderPokemonStats = stats => {
-    pokeStats.innerHTML = '';
+const renderPokemonStats = (stats, types) => {
+    pokeStats.innerHTML = '';     // Aquí obtenemos el color del primer tipo del Pokémon
+    const primaryType = types[0].type.name; // Cambia esto para obtener el tipo correcto
+    const colorOne = typeColors[primaryType];
     stats.forEach(stat => {
         const statElement = document.createElement("div");
         const statElementName = document.createElement("div");
@@ -176,7 +186,7 @@ const renderPokemonStats = stats => {
         const pxWidth = stat.base_stat * 100 / 200;
         statElementName.style.cssText = 'width: 70%;';
         statElementAmount.style.cssText = 'width: 10%; justify-content: right;';
-        statElementBar.style.cssText = `width: ${pxWidth}%; height : 15px ; justify-self: left; margin-right: 5px; margin-top: 5px; background : #383737; border-radius: 10px; transition: all .3s;` ;
+        statElementBar.style.cssText = `width: ${pxWidth}%; height : 15px ; justify-self: left; margin-right: 5px; margin-top: 5px; background: ${colorOne}; border-radius: 10px; transition: all .3s;` ;
         statElementName.setAttribute("id", "poke-stats-name") ;
         statElementBar.setAttribute("id", "poke-stats-points");
         statElementAmount.setAttribute("id", "poke-stats-amount");
@@ -196,6 +206,7 @@ const setCardColorBars = types => {
     const colorOneOne = typeColors[types[0].type.name];
     return colorOneOne
 };
+
 
 const renderNotFound = () => {
     pokeName.textContent = 'No encontrado';
