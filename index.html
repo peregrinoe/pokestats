@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1.0 ,user-scalable=no" />
     <meta name="descripción" content="Medidor de estats de pokemon competitivo">
     <title>Pokemon Stats</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="shortcut icon" href="https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/96e76632178f7c0.png">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Roboto:wght@300&display=swap" rel="stylesheet">
@@ -24,7 +25,6 @@
                         <input type="text" name="pokemon" autocomplete="off" placeholder="Buscar" class="searchPokemon" id="filterPokemon">
                     </form>
                 </div>
-                
             </div>
             <div data-pokemon-card class="card-pokemon">
                 <div data-color-top-poke class="color-top-poke"></div>
@@ -32,11 +32,11 @@
                     <img data-poke-image class="poke-image" src="https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/e7cb1a05e60dd2e.png" alt="">
                 </div>
                 <div class="pokemon-next">
-                    <button id="prev-btn">Anterior</button>
+                    <i class="fa-solid fa-circle-chevron-left fa-xl" id="prev-btn"></i>
                     <div data-poke-id class="poke-id">
                         <span id="pokemon-id"></span> <!-- Aquí se mostrará el ID -->
                     </div>
-                    <button id="next-btn">Siguiente</button>
+                    <i class="fa-solid fa-circle-chevron-right fa-xl" id="next-btn"></i>   
                 </div>
                 <div next-pokemon class="next-pokemon">
                 </div>

@@ -142,7 +142,12 @@ const setCardColor = types => {
     pokeTopColor.style.background = colorOne;
     statsPokemonBase.style.color = colorOne;
     pokeImageContainer.style.cssText = `background: linear-gradient(to bottom, ${colorOne} 0%, ${colorOne} 50%, white 50%, white 100%);`;
+    const iconColor = colorOne; // Puedes usar un color diferente si prefieres
+    document.querySelectorAll('.pokemon-next i').forEach(icon => {
+        icon.style.color = iconColor;
+    });
 };
+
 
 const renderPokemonTypes = types => {
     pokeType.innerHTML = '';
