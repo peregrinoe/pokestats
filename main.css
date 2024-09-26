@@ -89,6 +89,8 @@ body{
     border-radius: 20px;
     margin-top: 10px;
     margin-bottom: 10px;
+    transition: transform 0.3s ease; /* Para la transición */
+    touch-action: pan-y; /* Permitir el desplazamiento vertical */
 }
 
 .poke-image{

@@ -84,6 +84,8 @@ const spanishStats = {
     "speed" : 'Velocidad',
 };
 
+window.addEventListener('load', enterFullScreen);
+
 const loadAllPokemons = async () => {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${pokemonsNumber}`);
     const data = await response.json();
@@ -190,26 +192,21 @@ document.getElementById('next-btn').addEventListener('click', nextPokemon);
 document.getElementById('prev-btn').addEventListener('click', previousPokemon);
 
 let isMoving = false; // Bandera para evitar cambios múltiples
-
+let startX = 0; // Variable para almacenar la posición inicial
+let currentX = 0; // Variable para almacenar la posición actual
+const threshold = 100; // Umbral de desplazamiento para cambiar de Pokémon
 // Agregar eventos para desplazamiento en dispositivos móviles
 infoPokemon.addEventListener('touchstart', (event) => {
     startX = event.touches[0].clientX; // Guardar la posición X del primer toque
+    currentX = 0; // Reiniciar la posición actual
+    cardPokemon.style.transition = 'none'; // Desactivar la trans
 });
 
 infoPokemon.addEventListener('touchmove', (event) => {
     const moveX = event.touches[0].clientX; // Posición X actual
+    currentX = moveX - startX; // Calcular desplazamiento
 
-    if (!isMoving) { // Solo permitir cambios si no hay movimiento en curso
-        if (startX - moveX > 50) {
-            // Desplazamiento a la izquierda (navegar al siguiente Pokémon)
-            isMoving = true; // Evitar movimientos múltiples
-            nextPokemon();
-        } else if (moveX - startX > 50) {
-            // Desplazamiento a la derecha (navegar al Pokémon anterior)
-            isMoving = true; // Evitar movimientos múltiples
-            previousPokemon();
-        }
-    }
+    cardPokemon.style.transform = `translateX(${currentX}px)`;
 
     // Evitar que el evento se propague y cause otros comportamientos
     event.preventDefault();
@@ -217,9 +214,33 @@ infoPokemon.addEventListener('touchmove', (event) => {
 
 // Resetea la bandera al finalizar el toque
 infoPokemon.addEventListener('touchend', () => {
-    isMoving = false; // Permitir nuevos movimientos
-});
+    // Verifica si se movió lo suficiente para cambiar de Pokémon
+    if (Math.abs(currentX) < threshold) {
+        // Regresar a la posición original si no se movió lo suficiente
+        cardPokemon.style.transition = 'transform 0.3s ease'; // Añadir transición
+        cardPokemon.style.transform = 'translateX(0)'; // Regresar a la posición original
+    } else {
+        // Si se desplazó lo suficiente, mover fuera de la pantalla
+        cardPokemon.style.transition = 'transform 0.3s ease'; // Añadir transición
+        cardPokemon.style.transform = `translateX(${currentX > 0 ? '100%' : '-100%'})`; // Mover fuera de la pantalla
 
+        // Cambiar Pokémon después de un pequeño retraso para permitir la transición
+        setTimeout(() => {
+            if (currentX > 0) {
+                previousPokemon(); // Navegar al Pokémon anterior
+            } else {
+                nextPokemon(); // Navegar al siguiente Pokémon
+            }
+            // Restablecer la tarjeta a la posición original
+            cardPokemon.style.transition = 'none'; // Desactivar transición
+            cardPokemon.style.transform = 'translateX(0)'; // Regresar a la posición original
+        }, 300); // Espera que la transición termine
+    }
+
+    // Restablecer la bandera de movimiento
+    isMoving = false; // Permitir nuevos movimientos
+    
+});
 
 // Llama a la función al cargar la página
 fetchPokemonData(currentPokemonId);
