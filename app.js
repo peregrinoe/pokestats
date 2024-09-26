@@ -1,3 +1,15 @@
+const enterFullScreen = () => {
+    if (infoPokemon.requestFullscreen) {
+        infoPokemon.requestFullscreen();
+    } else if (infoPokemon.mozRequestFullScreen) { // Firefox
+        infoPokemon.mozRequestFullScreen();
+    } else if (infoPokemon.webkitRequestFullscreen) { // Chrome, Safari y Opera
+        infoPokemon.webkitRequestFullscreen();
+    } else if (infoPokemon.msRequestFullscreen) { // IE/Edge
+        infoPokemon.msRequestFullscreen();
+    }
+};
+
 const pokeName = document.querySelector('[data-poke-name]');
 const pokemonName = document.querySelector('[data-pokemon-name]');
 const infoPokemon = document.querySelector('[data-pokemon-info]');
@@ -176,6 +188,38 @@ const previousPokemon = () => {
 // Asocia los botones a las funciones una sola vez
 document.getElementById('next-btn').addEventListener('click', nextPokemon);
 document.getElementById('prev-btn').addEventListener('click', previousPokemon);
+
+let isMoving = false; // Bandera para evitar cambios múltiples
+
+// Agregar eventos para desplazamiento en dispositivos móviles
+infoPokemon.addEventListener('touchstart', (event) => {
+    startX = event.touches[0].clientX; // Guardar la posición X del primer toque
+});
+
+infoPokemon.addEventListener('touchmove', (event) => {
+    const moveX = event.touches[0].clientX; // Posición X actual
+
+    if (!isMoving) { // Solo permitir cambios si no hay movimiento en curso
+        if (startX - moveX > 50) {
+            // Desplazamiento a la izquierda (navegar al siguiente Pokémon)
+            isMoving = true; // Evitar movimientos múltiples
+            nextPokemon();
+        } else if (moveX - startX > 50) {
+            // Desplazamiento a la derecha (navegar al Pokémon anterior)
+            isMoving = true; // Evitar movimientos múltiples
+            previousPokemon();
+        }
+    }
+
+    // Evitar que el evento se propague y cause otros comportamientos
+    event.preventDefault();
+});
+
+// Resetea la bandera al finalizar el toque
+infoPokemon.addEventListener('touchend', () => {
+    isMoving = false; // Permitir nuevos movimientos
+});
+
 
 // Llama a la función al cargar la página
 fetchPokemonData(currentPokemonId);
