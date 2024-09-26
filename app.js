@@ -17,6 +17,7 @@ const btnSearch = document.querySelector('#btn');
 const pokemonsNumber = 898;
 
 let currentPokemonId = 1; // Agregado: Almacena el ID del Pokémon actual
+let allPokemons = []; // Almacena todos los nombres de Pokémon
 
 const typeColors = {
     electric: '#fab715',
@@ -71,14 +72,77 @@ const spanishStats = {
     "speed" : 'Velocidad',
 };
 
+const loadAllPokemons = async () => {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${pokemonsNumber}`);
+    const data = await response.json();
+    allPokemons = data.results.map(pokemon => pokemon.name);
+};
+
+loadAllPokemons();
+
+// Evento de entrada en el campo de búsqueda
+filter.addEventListener('input', () => {
+    const { value } = filter;
+    const lowerCaseValue = value.toLowerCase();
+    if (lowerCaseValue === '') {
+        hideSuggestions(); // Ocultar sugerencias si el campo está vacío
+        return; // Salir de la función
+    }
+    // Filtrar nombres similares
+    const matchedPokemons = allPokemons.filter(pokemon => pokemon.includes(lowerCaseValue));
+
+    // Limitar a solo 5 resultados
+    const limitedSuggestions = matchedPokemons.slice(0, 5);
+    showSuggestions(limitedSuggestions);
+});
+
+
+// Mostrar sugerencias
+const showSuggestions = (suggestions) => {
+    const suggestionBox = document.querySelector('.suggestion-box');
+    suggestionBox.innerHTML = ''; // Limpiar anteriores
+
+    if (suggestions.length > 0) {
+        suggestionBox.style.display = 'block'; // Mostrar caja de sugerencias
+        suggestions.forEach(suggestion => {
+            const suggestionItem = document.createElement('div');
+            suggestionItem.textContent = suggestion;
+            suggestionItem.onclick = () => {
+                fetchPokemonData(suggestion); // Al hacer clic, busca el Pokémon
+                hideSuggestions(); // Ocultar sugerencias al seleccionar
+            };
+            suggestionBox.appendChild(suggestionItem);
+        });
+    } else {
+        hideSuggestions(); // Ocultar si no hay sugerencias
+    }
+};
+
+const hideSuggestions = () => {
+    const suggestionBox = document.querySelector('.suggestion-box');
+    suggestionBox.innerHTML = ''; // Limpiar el contenido
+    suggestionBox.style.display = 'none'; // Ocultar el contenedor
+};
+
 const searchPokemon = event => {
     event.preventDefault();
     const { value } = event.target.pokemon;
-    fetch(`https://pokeapi.co/api/v2/pokemon/${value.toLowerCase()}`)
-        .then(data => data.json())
-        .then(response => renderPokemonData(response))
-        .catch(err => renderNotFound())
+    const lowerCaseValue = value.toLowerCase();
+    if (lowerCaseValue === '') {
+        hideSuggestions(); // Ocultar sugerencias si el campo está vacío
+        return; // Salir de la función
+    }
+    
+    const matchedPokemons = allPokemons.filter(pokemon => pokemon.includes(lowerCaseValue));
+    showSuggestions(matchedPokemons);
+
+    if (matchedPokemons.length > 0) {
+        fetchPokemonData(matchedPokemons[0]); // Buscar el primer Pokémon coincidente
+    } else {
+        renderNotFound(); // No se encontraron coincidencias
+    }
 };
+
 
 const fetchPokemonData = async (id) => { // Cambiado: Nombre de la función
     try {
@@ -87,6 +151,7 @@ const fetchPokemonData = async (id) => { // Cambiado: Nombre de la función
         const data = await response.json();
         currentPokemonId = data.id; // Actualiza el ID actual
         renderPokemonData(data);
+        hideSuggestions(); // Ocultar sugerencias después de elegir
     } catch (error) {
         renderNotFound();
     }
