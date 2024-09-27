@@ -8,7 +8,7 @@
 body{
     background-color: #dddddd;
     font-family: 'Roboto', sans-serif;
-    overflow: hidden; /* Evita el desplazamiento en la página */
+    overflow: scroll; /* Evita el desplazamiento en la página */
     height: 100vh;
 }
 
