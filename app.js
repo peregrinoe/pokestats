@@ -197,29 +197,43 @@ document.getElementById('next-btn').addEventListener('click', nextPokemon);
 document.getElementById('prev-btn').addEventListener('click', previousPokemon);
 
 let isMoving = false; // Bandera para evitar cambios múltiples
+let isScrolling = false; // Para saber si estamos desplazándonos
 let startX = 0; // Variable para almacenar la posición inicial
+let startY = 0; // Almacenar la posición Y inicial
 let currentX = 0; // Variable para almacenar la posición actual
 const threshold = 100; // Umbral de desplazamiento para cambiar de Pokémon
+
 // Agregar eventos para desplazamiento en dispositivos móviles
 infoPokemon.addEventListener('touchstart', (event) => {
     startX = event.touches[0].clientX; // Guardar la posición X del primer toque
+    startY = event.touches[0].clientY; // Guardar la posición Y
     currentX = 0; // Reiniciar la posición actual
     cardPokemon.style.transition = 'none'; // Desactivar la trans
+    isScrolling = false; // Reinicia el estado
 });
 
 infoPokemon.addEventListener('touchmove', (event) => {
     const moveX = event.touches[0].clientX; // Posición X actual
+    const moveY = event.touches[0].clientY;
     currentX = moveX - startX; // Calcular desplazamiento
 
-    const rotateDegree = (currentX / window.innerWidth) * 20; // Ajusta el grado de rotación
-    cardPokemon.style.transform = `translateX(${currentX}px)`;
+    // Verifica si el desplazamiento en Y es mayor que en X
+    const verticalMove = moveY - startY;
+    if (Math.abs(verticalMove) > Math.abs(currentX)) {
+        isScrolling = true; // Indica que estamos desplazándonos
+    }
 
-    // Evitar que el evento se propague y cause otros comportamientos
-    event.preventDefault();
+    if (!isScrolling) {
+        cardPokemon.style.transform = `translateX(${currentX}px)`;
+        event.preventDefault(); // Previene el scroll de la página
+    }
 });
 
 // Resetea la bandera al finalizar el toque
 infoPokemon.addEventListener('touchend', () => {
+    if (isScrolling) {
+        return; // No hace nada si estamos desplazándonos
+    }
     // Verifica si se movió lo suficiente para cambiar de Pokémon
      if (Math.abs(currentX) < threshold) {
         // Regresar a la posición original si no se movió lo suficiente
@@ -242,9 +256,6 @@ infoPokemon.addEventListener('touchend', () => {
             cardPokemon.style.transform = 'translateX(0) rotate(0deg)'; // Regresar a la posición original
         }, 300); // Espera que la transición termine
     }
-
-    // Restablecer la bandera de movimiento
-    isMoving = false; // Permitir nuevos movimientos
     
 });
 
