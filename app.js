@@ -26,7 +26,7 @@ const pokeFooterColor = document.querySelector('[data-color-footer-poke]');
 const pokeTopColor = document.querySelector('[data-color-top-poke]');
 const filter = document.querySelector('#filterPokemon');
 const btnSearch = document.querySelector('#btn');
-const pokemonsNumber = 898;
+const pokemonsNumber = 10000;
 
 let currentPokemonId = 1; // Agregado: Almacena el ID del Pokémon actual
 let allPokemons = []; // Almacena todos los nombres de Pokémon
@@ -140,24 +140,29 @@ const hideSuggestions = () => {
 
 const searchPokemon = event => {
     event.preventDefault();
-    const { value } = event.target.pokemon;
-    const lowerCaseValue = value.toLowerCase();
-    if (lowerCaseValue === '') {
-        hideSuggestions(); // Ocultar sugerencias si el campo está vacío
-        return; // Salir de la función
-    }
-    
-    const matchedPokemons = allPokemons.filter(pokemon => pokemon.includes(lowerCaseValue));
-    showSuggestions(matchedPokemons);
-
-    if (matchedPokemons.length > 0) {
-        fetchPokemonData(matchedPokemons[0]); // Buscar el primer Pokémon coincidente
+    const lowerCaseValue = filter.value.toLowerCase();
+    const idValue = parseInt(lowerCaseValue);
+    if (!isNaN(idValue) && idValue > 0 && idValue <= pokemonsNumber) {
+        fetchPokemonData(idValue); // Busca por ID directamente
     } else {
-        renderNotFound(); // No se encontraron coincidencias
+        // Si no es un número, busca por nombre
+        const matchedPokemons = allPokemons.filter(pokemon => pokemon.includes(lowerCaseValue));
+        if (matchedPokemons.length > 0) {
+            fetchPokemonData(matchedPokemons[0]); // Busca el primer Pokémon coincidente
+        } else {
+            renderNotFound(); // No se encontraron coincidencias
+        }
     }
+
+    hideSuggestions(); // Ocultar sugerencias al buscar
 };
 
-
+// Evento para manejar la tecla "Enter"
+filter.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        searchPokemon(event); // Llama a la función para buscar el Pokémon
+    }
+});
 const fetchPokemonData = async (id) => { // Cambiado: Nombre de la función
     try {
         const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
@@ -206,6 +211,7 @@ infoPokemon.addEventListener('touchmove', (event) => {
     const moveX = event.touches[0].clientX; // Posición X actual
     currentX = moveX - startX; // Calcular desplazamiento
 
+    const rotateDegree = (currentX / window.innerWidth) * 20; // Ajusta el grado de rotación
     cardPokemon.style.transform = `translateX(${currentX}px)`;
 
     // Evitar que el evento se propague y cause otros comportamientos
@@ -215,14 +221,14 @@ infoPokemon.addEventListener('touchmove', (event) => {
 // Resetea la bandera al finalizar el toque
 infoPokemon.addEventListener('touchend', () => {
     // Verifica si se movió lo suficiente para cambiar de Pokémon
-    if (Math.abs(currentX) < threshold) {
+     if (Math.abs(currentX) < threshold) {
         // Regresar a la posición original si no se movió lo suficiente
         cardPokemon.style.transition = 'transform 0.3s ease'; // Añadir transición
-        cardPokemon.style.transform = 'translateX(0)'; // Regresar a la posición original
+        cardPokemon.style.transform = 'translateX(0) rotate(0deg)'; // Regresar a la posición original
     } else {
         // Si se desplazó lo suficiente, mover fuera de la pantalla
         cardPokemon.style.transition = 'transform 0.3s ease'; // Añadir transición
-        cardPokemon.style.transform = `translateX(${currentX > 0 ? '100%' : '-100%'})`; // Mover fuera de la pantalla
+        cardPokemon.style.transform = `translateX(${currentX > 0 ? '100%' : '-100%'}) rotate(${currentX > 0 ? '15deg' : '-15deg'})`; // Mover fuera de la pantalla`; // Mover fuera de la pantalla
 
         // Cambiar Pokémon después de un pequeño retraso para permitir la transición
         setTimeout(() => {
@@ -233,7 +239,7 @@ infoPokemon.addEventListener('touchend', () => {
             }
             // Restablecer la tarjeta a la posición original
             cardPokemon.style.transition = 'none'; // Desactivar transición
-            cardPokemon.style.transform = 'translateX(0)'; // Regresar a la posición original
+            cardPokemon.style.transform = 'translateX(0) rotate(0deg)'; // Regresar a la posición original
         }, 300); // Espera que la transición termine
     }
 
