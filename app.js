@@ -53,6 +53,24 @@ const typeColors = {
     default: '#a17366',
 };
 
+const eggGroupColors = {
+    "monster": "#d25064",
+    "water1": "#97b5fd",
+    "bug": "#aac22a",
+    "flying": "#b29afa",
+    "ground": "#e0c068",
+    "fairy": "#ffc8f0",
+    "plant": "#82d25a",
+    "humanshape": "#d29682",
+    "water3": "#5876be",
+    "mineral": "#7a6252",
+    "indeterminate": "#8a8a8a",
+    "water2": "#729afa",
+    "ditto": "#282a36",
+    "dragon": "#7a42ff",
+    "no-eggs": "#333333"
+};
+
 const spanishName = {
     electric: 'Electrico',
     normal: 'Normal',
@@ -73,6 +91,24 @@ const spanishName = {
     fairy: 'Hada',
     dark: "Sinistro",
     default: 'N/A',
+};
+
+const eggGroupNamesSpanish = {
+    "monster": "Monstruo",
+    "water1": "Agua 1",
+    "bug": "Bicho",
+    "flying": "Volador",
+    "ground": "Tierra",
+    "fairy": "Hada",
+    "plant": "Planta",
+    "humanshape": "Forma Humanoide",
+    "water3": "Agua 3",
+    "mineral": "Mineral",
+    "indeterminate": "Indeterminado",
+    "water2": "Agua 2",
+    "ditto": "Ditto",
+    "dragon": "Dragón",
+    "no-eggs": "Sin Huevos"
 };
 
 const spanishStats = {
@@ -169,6 +205,15 @@ const fetchPokemonData = async (id) => { // Cambiado: Nombre de la función
         if (!response.ok) throw new Error('No encontrado');
         const data = await response.json();
         currentPokemonId = data.id; // Actualiza el ID actual
+         // Obtener información de la especie para acceder a los grupos de huevo
+        const speciesResponse = await fetch(data.species.url);
+        if (!speciesResponse.ok) throw new Error('No encontrado especie');
+        const speciesData = await speciesResponse.json();
+
+        // Obtener grupos de huevo
+        const eggGroups = speciesData.egg_groups; // Accede a los grupos de huevo
+        renderEggGroups(eggGroups); // Llama a la función para renderizar grupos de huevo
+
         renderPokemonData(data);
         hideSuggestions(); // Ocultar sugerencias después de elegir
     } catch (error) {
@@ -259,9 +304,6 @@ infoPokemon.addEventListener('touchend', () => {
     
 });
 
-// Llama a la función al cargar la página
-fetchPokemonData(currentPokemonId);
-
 const renderPokemonData = data => {
     const sprite = data.sprites.other["official-artwork"].front_default;
     const {stats, types, abilities} = data;  
@@ -278,6 +320,9 @@ const renderPokemonData = data => {
     const primaryType = types[0].type.name; // Cambiado
     const colorOne = typeColors[primaryType]; // Asegúrate de que esto esté correcto
 };
+
+// Llama a la función al cargar la página
+fetchPokemonData(currentPokemonId);
 
 const setCardColor = types => {
     const colorOne = typeColors[types[0].type.name];
@@ -359,6 +404,16 @@ const setCardColorBars = types => {
     return colorOneOne
 };
 
+const renderEggGroups = eggGroups => {
+    const eggGroupContainer = document.querySelector('[data-eggGroup]');
+    eggGroupContainer.innerHTML = ''; // Limpiar contenido anterior
+    eggGroups.forEach(group => {
+        const groupElement = document.createElement("div");
+        groupElement.textContent = eggGroupNamesSpanish[group.name] || group.name; 
+        groupElement.style.backgroundColor = eggGroupColors[group.name] || '#ffffff'; // Fallback a blanco
+        eggGroupContainer.appendChild(groupElement);
+    });
+};
 
 const renderNotFound = () => {
     pokeName.textContent = 'No encontrado';
