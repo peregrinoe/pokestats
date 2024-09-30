@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1.0 ,user-scalable=no" />
-    <meta name="description" content="Medidor de estats de pokemon competitivo">
-    <meta name="keywords" content="Pokedex, Pokemon, Stats Pokemon, Build Team Pokemon, Estrategía Pokemon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="Medidor de estados de Pokémon competitivo">
+    <meta name="keywords" content="Pokedex, Pokemon, Stats Pokemon, Build Team Pokemon, Estrategia Pokemon"/>
     <link rel="preconnect" href="https://pokeapi.co">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -20,14 +20,12 @@
     <div class="container">
         <div data-pokemon-info class="info-pokemon">
             <div data-pokemon-name class="name-pokemon">
-                <div data-poke-name class="poke-name">
-                    
-                </div>
+                <div data-poke-name class="poke-name"></div>
                 <div class="searchPokemon">
-                        <input type="text" name="pokemon" autocomplete="off" placeholder="Buscar Pokemon..." class="searchPokemon" id="filterPokemon">
+                    <input type="text" id="filterPokemon" class="searchPokemon" placeholder="Buscar Pokémon..." autocomplete="off">
                 </div>
             </div>
-            <div class="suggestion-box"></div><!-- Contenedor para las sugerencias -->
+            <div class="suggestion-box"></div>
             <div data-pokemon-card class="card-pokemon">
                 <div data-color-top-poke class="color-top-poke"></div>
                 <div data-poke-image-container class="poke-image-container">
@@ -36,32 +34,25 @@
                 <div class="pokemon-next">
                     <i class="fa-solid fa-circle-chevron-left fa-xl" id="prev-btn"></i>
                     <div data-poke-id class="poke-id">
-                        <span id="pokemon-id"></span> <!-- Aquí se mostrará el ID -->
+                        <span id="pokemon-id"></span>
                     </div>
-                    <i class="fa-solid fa-circle-chevron-right fa-xl" id="next-btn"></i>   
+                    <i class="fa-solid fa-circle-chevron-right fa-xl" id="next-btn"></i>
                 </div>
-                <div next-pokemon class="next-pokemon">
-                </div>
-                <div data-poke-type class="poke-type">
-                </div>
+                <div next-pokemon class="next-pokemon"></div>
+                <div data-poke-type class="poke-type"></div>
                 <div data-poke-ability class="poke-ability"></div>
                 <div data-pokemon-stats class="pokemon-stats">
-                    <div data-stats-pokemon-base class="stats-pokemon-base">
-                    </div>
-                    <div data-poke-stats class="poke-stats">
-                        <div class="poke-stats-value">
-                        </div>
-                    </div>
+                    <div data-stats-pokemon-base class="stats-pokemon-base"></div>
+                    <div data-poke-stats class="poke-stats"></div>
                 </div>
                 <div data-color-footer-poke class="color-footer-poke"></div>
-            </div> 
+            </div>
             <div data-more-info-pokemon class="more-info-pokemon">
-                <br>
                 <p>Grupo Huevo</p>
                 <div data-eggGroup class="egg-group"></div>
             </div>
         </div>
     </div>
-</body>
     <script src="app.js" type="text/javascript"></script>
+</body>
 </html>
